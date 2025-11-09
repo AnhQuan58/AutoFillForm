@@ -34,6 +34,9 @@ class TestTest1():
         # chrome_options.add_argument("--incognito")
         # Mở trình duyệt
         self.driver = webdriver.Chrome(options=chrome_options)
+        print("ChromeDriver version:", self.driver.capabilities['browserVersion'])
+        print("Driver session started")
+
         self.driver.maximize_window()
         self.vars = {}
   
@@ -70,6 +73,7 @@ class TestTest1():
     # print(email for email in emails)
     for email in emails:
       # self.setup_method()
+      self.driver.delete_all_cookies()
       self.driver.get("https://docs.google.com/forms/d/e/1FAIpQLScfnbNpqD8HBYFvae7ImE-yTxvJnGsefKG5VXTsVkGpUYvM1A/viewform")
       time.sleep(2)
       self.driver.find_element(By.CSS_SELECTOR, ".YhQJj > .l4V7wb").click()
@@ -126,7 +130,7 @@ class TestTest1():
       time.sleep(3)
       # 13 | click | css=.qs41qe > .l4V7wb | 
       # self.driver.find_element(By.CSS_SELECTOR, ".YhQJj > .l4V7wb").click()
-      button = self.driver.find_element(By.XPATH, "//span[text()='Tiếp']")
+      button = self.driver.find_element(By.XPATH,"//span[contains(text(),'Tiếp') or contains(text(),'Next')]")
       self.driver.execute_script("arguments[0].click();", button)
       time.sleep(3)
 
@@ -164,18 +168,26 @@ class TestTest1():
 
       # self.driver.execute_script("window.scrollBy(0, 220);")
       
-      self.driver.find_element(By.XPATH, "//span[text()='Tiếp']").click()
+      try:
+          # Thử tìm nút Tiếp / Next trước
+          next_button = self.driver.find_element(By.XPATH, "//span[contains(text(),'Tiếp') or contains(text(),'Next')]")
+          next_button.click()
+          print("⏩ Tìm thấy nút Tiếp/Next, click để qua trang tiếp theo")
+          time.sleep(2)
+          button = self.driver.find_element(By.XPATH,"//span[contains(text(),'Gửi') or contains(text(),'Submit')]")
+          self.driver.execute_script("arguments[0].click();", button)
+      except:
+          # Nếu không có, tìm nút Gửi / Submit
+          button = self.driver.find_element(By.XPATH, "//span[contains(text(),'Gửi') or contains(text(),'Submit')]")
+          print("✅ Không có nút Tiếp/Next, click nút Gửi/Submit")
+          self.driver.execute_script("arguments[0].click();", button)
+
+      print(f"Đã hoàn thành")
       time.sleep(2)
 
       # 49 | click | css=.qs41qe > .l4V7wb | 
       # self.driver.find_element(By.CSS_SELECTOR, ".qs41qe > .l4V7wb").click()
       # 50 | click | css=.Y5sE8d > .l4V7wb | 
-      button = self.driver.find_element(By.XPATH, "//span[text()='Gửi']")
-      self.driver.execute_script("arguments[0].click();", button)
-      print(f"Đã hoàn thành")
-      time.sleep(2)
+      
 
       # self.teardown_method()
-
-      
-  
