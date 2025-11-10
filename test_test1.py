@@ -107,8 +107,11 @@ class TestTest1():
                 elif i == 3:
                   pos_choice = [0,1,2,3]
                   choice = random.choice(pos_choice)
-                # elif i == 2:
-                #   choice = 3
+                elif i ==1:
+                  pos_choice = [2,3]
+                  choice = random.choice(pos_choice)
+                elif i == 2:
+                  choice = 3
                 radio = radios[choice]
 
                 # Cuộn đến phần tử đó
